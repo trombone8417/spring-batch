@@ -1,6 +1,7 @@
 package com.infybuzz.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.batch.core.Job;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import com.infybuzz.request.JobParamsRequest;
 
 @Service
 public class JobService {
@@ -28,9 +31,14 @@ public class JobService {
 	Job secondJob;
 	
 	@Async
-	public void startJob(String jobName) {
+	public void startJob(String jobName, List<JobParamsRequest> jobParamsRequests) {
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put("currentTime", new JobParameter(System.currentTimeMillis()));
+		
+		jobParamsRequests.stream().forEach(jobParmReq -> {
+			params.put(jobParmReq.getParamKey(), 
+					new JobParameter(jobParmReq.getParamValue()));
+		});
 		
 		JobParameters jobParameters = new JobParameters(params);
 		
