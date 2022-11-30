@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 	"com.infybuzz.listener", "com.infybuzz.reader", "com.infybuzz.processor",
 	"com.infybuzz.writer", "com.infybuzz.controller"})
 @EnableAsync
-@EnableScheduling
+//@EnableScheduling
 public class SpringBatchApplication {
 
 	public static void main(String[] args) {
