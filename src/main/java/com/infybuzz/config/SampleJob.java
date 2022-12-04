@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -16,6 +17,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -114,18 +116,20 @@ public class SampleJob {
 	private Step firstChunkStep() {
 		return stepBuilderFactory.get("First Chunk Step")
 				.<StudentCsv, StudentCsv>chunk(3)
-				.reader(flatFileItemReader())
+				.reader(flatFileItemReader(null))
 				//.processor(firstItemProcessor)
 				.writer(firstItemWriter)
 				.build();
 	}
 	
-	public FlatFileItemReader<StudentCsv> flatFileItemReader() {
+	@StepScope
+	@Bean
+	public FlatFileItemReader<StudentCsv> flatFileItemReader(
+			@Value("#{jobParameters['inputFile']}") FileSystemResource fileSystemResource) {
 		FlatFileItemReader<StudentCsv> flatFileItemReader =
 				new FlatFileItemReader<StudentCsv>();
 		
-		flatFileItemReader.setResource(new FileSystemResource(
-				new File("C:\\Users\\kuei\\Desktop\\github\\spring-batch\\InputFiles\\students.csv")));
+		flatFileItemReader.setResource(fileSystemResource);
 	
 		flatFileItemReader.setLineMapper(new DefaultLineMapper<StudentCsv>() {
 			{
