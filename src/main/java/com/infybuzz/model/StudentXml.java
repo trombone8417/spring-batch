@@ -1,5 +1,6 @@
 package com.infybuzz.model;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name= "student")
@@ -21,6 +22,7 @@ public class StudentXml {
 		this.id = id;
 	}
 
+	@XmlElement(name = "f_n")
 	public String getFirstName() {
 		return firstName;
 	}
