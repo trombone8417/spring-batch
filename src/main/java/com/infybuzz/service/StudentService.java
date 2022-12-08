@@ -11,19 +11,32 @@ import com.infybuzz.model.StudentResponse;
 @Service
 public class StudentService {
 	
+	List<StudentResponse> list;
+	
 	public List<StudentResponse> restCallToGetStudents(){
 		RestTemplate restTemplate = new RestTemplate();
 		StudentResponse[] studentResponseArray =
 				restTemplate.getForObject("http://localhost:8081/api/v1/students", 
 				StudentResponse[].class);
 		
-		List<StudentResponse>  list = new ArrayList<>();
+		list = new ArrayList<>();
 		
 		for(StudentResponse sr : studentResponseArray) {
 			list.add(sr);
 		}
 		
 		return list;
+	}
+	
+	public StudentResponse getStudent() {
+		if(list == null) {
+			restCallToGetStudents();
+		}
+		
+		if (list != null && !list.isEmpty()) {
+			return list.remove(0);
+		}
+		return null;
 	}
 }
 
