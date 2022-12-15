@@ -1,1 +1,1 @@
-run=three a=b outputFile=D:\桌面\github\spring-batch\spring-batch\OutputFiles\students.csv
+run=three a=b inputFile=C:\Users\kuei\Desktop\github\spring-batch\spring-batch\InputFiles\students.csv
