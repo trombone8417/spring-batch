@@ -17,6 +17,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.adapter.ItemWriterAdapter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -51,10 +52,12 @@ import com.infybuzz.listener.FirstStepListener;
 import com.infybuzz.model.StudentCsv;
 import com.infybuzz.model.StudentJdbc;
 import com.infybuzz.model.StudentJson;
+import com.infybuzz.model.StudentResponse;
 import com.infybuzz.model.StudentXml;
 import com.infybuzz.processor.FirstItemProcessor;
 import com.infybuzz.reader.FirstItemReader;
 import com.infybuzz.service.SecondTasklet;
+import com.infybuzz.service.StudentService;
 import com.infybuzz.writer.FirstItemWriter;
 
 @Configuration
@@ -83,10 +86,10 @@ public class SampleJob {
 	
 	@Autowired
 	private FirstItemWriter firstItemWriter;
-	
-	/*
-	 * @Autowired private StudentService studentService;
-	 */
+		
+	@Autowired 
+	private StudentService studentService;
+	 
 
 	@Autowired
 	@Qualifier("datasource")
@@ -166,7 +169,8 @@ public class SampleJob {
 				//.writer(jsonFileItemWriter(null))
 				//.writer(staxEventItemWriter(null))
 				//.writer(jdbcBatchItemWriter())
-				.writer(jdbcBatchItemWriter1())
+				//.writer(jdbcBatchItemWriter1())
+				.writer(itemWriterAdapter())
 				.build();
 	}
 	
@@ -373,6 +377,18 @@ public class SampleJob {
 		
 		return jdbcBatchItemWriter;
 	}
+	
+	
+	public ItemWriterAdapter<StudentCsv> itemWriterAdapter() {
+		ItemWriterAdapter<StudentCsv> itemWriterAdapter = 
+				new ItemWriterAdapter<StudentCsv>();
+
+		itemWriterAdapter.setTargetObject(studentService);
+		itemWriterAdapter.setTargetMethod("restCallToCreateStudent");
+
+		return itemWriterAdapter;
+	}
+	 
 }
 
 
