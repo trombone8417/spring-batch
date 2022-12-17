@@ -5,14 +5,15 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import com.infybuzz.model.StudentCsv;
 import com.infybuzz.model.StudentJdbc;
 import com.infybuzz.model.StudentJson;
 
 @Component
-public class FirstItemProcessor implements ItemProcessor<StudentJdbc, StudentJson> {
+public class FirstItemProcessor implements ItemProcessor<StudentCsv, StudentJson> {
 
 	@Override
-	public StudentJson process(StudentJdbc item) throws Exception {
+	public StudentJson process(StudentCsv item) throws Exception {
 		System.out.println("Inside Item Processor");
 		StudentJson studentJson = new StudentJson();
 		studentJson.setId(item.getId());

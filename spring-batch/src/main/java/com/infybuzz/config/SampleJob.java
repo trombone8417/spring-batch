@@ -16,6 +16,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.adapter.ItemWriterAdapter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
@@ -157,20 +158,15 @@ public class SampleJob {
 	
 	private Step firstChunkStep() {
 		return stepBuilderFactory.get("First Chunk Step")
-				.<StudentCsv, StudentCsv>chunk(3)
+				.<StudentCsv, StudentJson>chunk(3)
 				.reader(flatFileItemReader(null))
-				//.reader(flatFileItemReader(null))
-				//.reader(jsonItemReader(null))
-				//.reader(staxEventItemReader(null))
-				//.reader(jdbcCursorItemReader())
-				//.reader(itemReaderAdapter())
-				//.processor(firstItemProcessor)
-				//.writer(flatFileItemWriter(null))
-				//.writer(jsonFileItemWriter(null))
-				//.writer(staxEventItemWriter(null))
-				//.writer(jdbcBatchItemWriter())
-				//.writer(jdbcBatchItemWriter1())
-				.writer(itemWriterAdapter())
+				.processor(firstItemProcessor)
+				.writer(jsonFileItemWriter(null))
+				.faultTolerant()
+				.skip(Throwable.class)
+				//.skip(NullPointerException.class)
+				//.skipLimit(Integer.MAX_VALUE)
+				.skipPolicy(new AlwaysSkipItemSkipPolicy())
 				.build();
 	}
 	
