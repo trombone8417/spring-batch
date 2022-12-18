@@ -50,6 +50,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.infybuzz.listener.FirstJobListener;
 import com.infybuzz.listener.FirstStepListener;
+import com.infybuzz.listener.SkipListener;
 import com.infybuzz.model.StudentCsv;
 import com.infybuzz.model.StudentJdbc;
 import com.infybuzz.model.StudentJson;
@@ -87,6 +88,9 @@ public class SampleJob {
 	
 	@Autowired
 	private FirstItemWriter firstItemWriter;
+	
+	@Autowired
+	private SkipListener skipListener;
 		
 	@Autowired 
 	private StudentService studentService;
@@ -167,6 +171,7 @@ public class SampleJob {
 				//.skip(NullPointerException.class)
 				//.skipLimit(Integer.MAX_VALUE)
 				.skipPolicy(new AlwaysSkipItemSkipPolicy())
+				.listener(skipListener)
 				.build();
 	}
 	
