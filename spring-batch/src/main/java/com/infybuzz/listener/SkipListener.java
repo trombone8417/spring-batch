@@ -6,10 +6,12 @@ import java.util.Date;
 
 import org.springframework.batch.core.annotation.OnSkipInProcess;
 import org.springframework.batch.core.annotation.OnSkipInRead;
+import org.springframework.batch.core.annotation.OnSkipInWrite;
 import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.stereotype.Component;
 
 import com.infybuzz.model.StudentCsv;
+import com.infybuzz.model.StudentJson;
 
 @Component
 public class SkipListener {
@@ -26,6 +28,12 @@ public class SkipListener {
 	public void skipInProcess(StudentCsv studentCsv, Throwable th) {
 		createFile("C:\\Users\\kuei\\Desktop\\github\\spring-batch\\spring-batch\\Chunk Job\\First Chunk Step\\processer\\SkipInProcess.txt", 
 				studentCsv.toString());
+	}
+	
+	@OnSkipInWrite
+	public void skipInWriter(StudentJson studentJson, Throwable th) {
+		createFile("C:\\Users\\kuei\\Desktop\\github\\spring-batch\\spring-batch\\Chunk Job\\First Chunk Step\\writer\\SkipInWrite.txt", 
+				studentJson.toString());
 	}
 	
 	public void createFile(String filePath, String data) {

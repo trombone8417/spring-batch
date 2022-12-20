@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -315,8 +316,18 @@ public class SampleJob {
 	public JsonFileItemWriter<StudentJson> jsonFileItemWriter(
 			@Value("#{jobParameters['outputFile']}") FileSystemResource fileSystemResource){
 		JsonFileItemWriter<StudentJson> jsonFileItemWriter = 
-				new JsonFileItemWriter<>(fileSystemResource, 
-						new JacksonJsonObjectMarshaller<StudentJson>());
+				new JsonFileItemWriter<StudentJson>(fileSystemResource, 
+						new JacksonJsonObjectMarshaller<StudentJson>()) {
+			@Override
+			public String doWrite(List<? extends StudentJson> items) {
+				items.stream().forEach(item -> {
+					if (item.getId() == 3) {
+						throw new NullPointerException();
+					}
+				});
+				return super.doWrite(items);
+			}
+		};
 		
 		return jsonFileItemWriter;
 	}
