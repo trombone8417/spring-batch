@@ -174,8 +174,10 @@ public class SampleJob {
 				.faultTolerant()
 				.skip(Throwable.class)
 				//.skip(NullPointerException.class)
-				//.skipLimit(Integer.MAX_VALUE)
-				.skipPolicy(new AlwaysSkipItemSkipPolicy())
+				.skipLimit(100)
+				//.skipPolicy(new AlwaysSkipItemSkipPolicy())
+				.retryLimit(3)
+				.retry(Throwable.class)
 				//.listener(skipListener)
 				.listener(skipListenerImpl)
 				.build();
@@ -327,6 +329,7 @@ public class SampleJob {
 			public String doWrite(List<? extends StudentJson> items) {
 				items.stream().forEach(item -> {
 					if (item.getId() == 3) {
+						System.out.println("Inside jsonFileItemWriter");
 						throw new NullPointerException();
 					}
 				});
