@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
@@ -24,6 +25,7 @@ import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourc
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.file.FlatFileFooterCallback;
 import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -58,6 +60,7 @@ import com.infybuzz.model.StudentJdbc;
 import com.infybuzz.model.StudentJson;
 import com.infybuzz.model.StudentResponse;
 import com.infybuzz.model.StudentXml;
+import com.infybuzz.postgresql.entity.Student;
 import com.infybuzz.processor.FirstItemProcessor;
 import com.infybuzz.reader.FirstItemReader;
 import com.infybuzz.service.SecondTasklet;
@@ -112,6 +115,14 @@ public class SampleJob {
 	@Autowired
 	@Qualifier("postgresdatasource")
 	private DataSource postgresdatasource;
+	
+	@Autowired
+	@Qualifier("postpresqlEntityManagerFactory")
+	private EntityManagerFactory postpresqlEntityManagerFactory;
+	
+	@Autowired
+	@Qualifier("mysqlEntityManagerFactory")
+	private EntityManagerFactory mysqlEntityManagerFactory;
 	
 	@Bean
 	public Job firstJob() {
@@ -412,6 +423,7 @@ public class SampleJob {
 
 		return itemWriterAdapter;
 	}
+
 	 
 }
 
