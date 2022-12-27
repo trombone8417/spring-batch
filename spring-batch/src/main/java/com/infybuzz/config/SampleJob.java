@@ -424,7 +424,17 @@ public class SampleJob {
 		return itemWriterAdapter;
 	}
 
-	 
+	
+	public JpaCursorItemReader<Student> jpaCursorItemReader() {
+		JpaCursorItemReader<Student> jpaCursorItemReader = 
+				new JpaCursorItemReader<Student>();
+		
+		jpaCursorItemReader.setEntityManagerFactory(postpresqlEntityManagerFactory);
+		
+		jpaCursorItemReader.setQueryString("From Student");
+		
+		return jpaCursorItemReader;
+	}
 }
 
 
