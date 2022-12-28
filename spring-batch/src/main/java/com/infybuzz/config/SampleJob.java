@@ -26,6 +26,7 @@ import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.JpaCursorItemReader;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileFooterCallback;
 import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -434,6 +435,15 @@ public class SampleJob {
 		jpaCursorItemReader.setQueryString("From Student");
 		
 		return jpaCursorItemReader;
+	}
+	
+	public JpaItemWriter<com.infybuzz.mysql.entity.Student> jpaItemWriter() {
+		JpaItemWriter<com.infybuzz.mysql.entity.Student> jpaItemWriter =
+				new JpaItemWriter<com.infybuzz.mysql.entity.Student>();
+		
+		jpaItemWriter.setEntityManagerFactory(mysqlEntityManagerFactory);
+		
+		return jpaItemWriter;
 	}
 }
 
