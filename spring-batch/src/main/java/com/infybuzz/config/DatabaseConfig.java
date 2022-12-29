@@ -4,7 +4,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -37,9 +36,10 @@ public class DatabaseConfig {
 		return DataSourceBuilder.create().build();
 	}
 	
-
+	@Bean
 	public EntityManagerFactory postgresqlEntityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean lem = new LocalContainerEntityManagerFactoryBean();
+		LocalContainerEntityManagerFactoryBean lem = 
+				new LocalContainerEntityManagerFactoryBean();
 		
 		lem.setDataSource(postgresdatasource());
 		lem.setPackagesToScan("com.infybuzz.postgresql.entity");
@@ -50,8 +50,10 @@ public class DatabaseConfig {
 		return lem.getObject();
 	}
 	
+	@Bean
 	public EntityManagerFactory mysqlEntityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean lem = new LocalContainerEntityManagerFactoryBean();
+		LocalContainerEntityManagerFactoryBean lem = 
+				new LocalContainerEntityManagerFactoryBean();
 		
 		lem.setDataSource(universitydatasource());
 		lem.setPackagesToScan("com.infybuzz.mysql.entity");

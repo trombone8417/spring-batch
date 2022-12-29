@@ -50,6 +50,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.infybuzz.listener.FirstJobListener;
@@ -118,12 +119,15 @@ public class SampleJob {
 	private DataSource postgresdatasource;
 	
 	@Autowired
-	@Qualifier("postpresqlEntityManagerFactory")
-	private EntityManagerFactory postpresqlEntityManagerFactory;
+	@Qualifier("postgresqlEntityManagerFactory")
+	private EntityManagerFactory postgresqlEntityManagerFactory;
 	
 	@Autowired
 	@Qualifier("mysqlEntityManagerFactory")
 	private EntityManagerFactory mysqlEntityManagerFactory;
+	
+	@Autowired
+	private JpaTransactionManager jpaTransactionManager;
 	
 	@Bean
 	public Job firstJob() {
@@ -196,6 +200,7 @@ public class SampleJob {
 				.retry(Throwable.class)
 				//.listener(skipListener)
 				.listener(skipListenerImpl)
+				.transactionManager(jpaTransactionManager)
 				.build();
 	}
 	
@@ -430,7 +435,7 @@ public class SampleJob {
 		JpaCursorItemReader<Student> jpaCursorItemReader = 
 				new JpaCursorItemReader<Student>();
 		
-		jpaCursorItemReader.setEntityManagerFactory(postpresqlEntityManagerFactory);
+		jpaCursorItemReader.setEntityManagerFactory(postgresqlEntityManagerFactory);
 		
 		jpaCursorItemReader.setQueryString("From Student");
 		
