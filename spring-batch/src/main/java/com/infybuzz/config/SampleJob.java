@@ -183,10 +183,10 @@ public class SampleJob {
 	
 	private Step firstChunkStep() {
 		return stepBuilderFactory.get("First Chunk Step")
-				.<StudentCsv, StudentJson>chunk(3)
-				.reader(flatFileItemReader(null))
+				.<Student, com.infybuzz.mysql.entity.Student>chunk(3)
+				.reader(jpaCursorItemReader())
 				.processor(firstItemProcessor)
-				.writer(jsonFileItemWriter(null))
+				.writer(jpaItemWriter())
 				.faultTolerant()
 				.skip(Throwable.class)
 				//.skip(NullPointerException.class)
